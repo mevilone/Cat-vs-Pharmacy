@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Кошка-героиня</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef3ee;--card:#fff;--ink:#2b3a33;--mute:#6b7d73;--accent:#e0698f;--onacc:#fff;--line:#d9e5da;--soft:#f1f6f1;--gold:#b97d08;--hp:#e0698f;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141a17;--card:#1d2621;--ink:#e9f3ec;--mute:#9db1a5;--accent:#ff86ac;--onacc:#2b0b1a;--line:#2e3c34;--soft:#26332c;--gold:#ffc95c;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#141a17;--card:#1d2621;--ink:#e9f3ec;--mute:#9db1a5;--accent:#ff86ac;--onacc:#2b0b1a;--line:#2e3c34;--soft:#26332c;--gold:#ffc95c;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 Nunito,"Trebuchet MS",system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+main{max-width:520px;margin:0 auto;padding:12px 12px 40px}
+.bar0{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.chip{background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:6px 14px;font-weight:800}
+.chip b{color:var(--gold)}.chip small{color:var(--mute);font-weight:600;margin-left:6px}
+.path{display:flex;gap:5px;align-items:center}
+.path i{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.path i.d{background:var(--accent)}
+.path i.c{background:var(--card);border:3px solid var(--accent);animation:pulse 1.2s infinite}
+@keyframes pulse{50%{transform:scale(1.35)}}
+.arena{--tx:#33503c;--ts:rgba(255,255,255,.75);position:relative;height:330px;margin-top:10px;border-radius:26px;overflow:hidden;touch-action:manipulation;user-select:none;-webkit-user-select:none;cursor:pointer;border:2px solid var(--line);background:#cfeaff}
+.arena.fight{--tx:#fff;--ts:rgba(0,0,0,.5)}
+.bg{position:absolute;inset:0;transition:opacity .7s}
+.afk-bg{background:linear-gradient(#bfe3ff 0%,#e6f4ff 48%,#fdf0e2 72%)}
+.fight-bg{background:linear-gradient(#3a2f7a,#251f5c 55%,#17143d)}
+.fight-bg::before{content:"";position:absolute;inset:0;background:radial-gradient(2px 2px at 12% 18%,#fff,transparent),radial-gradient(2px 2px at 40% 10%,#fff,transparent),radial-gradient(2px 2px at 70% 22%,#fff,transparent),radial-gradient(1.5px 1.5px at 88% 12%,#fff,transparent),radial-gradient(1.5px 1.5px at 55% 30%,#fff,transparent)}
+.arena.afk .fight-bg,.arena.fight .afk-bg{opacity:0}
+.sun{position:absolute;top:18px;right:24px;width:58px;height:58px;border-radius:50%;background:radial-gradient(circle,#fff7cf 30%,#ffe69a 62%,rgba(255,230,154,0) 72%);box-shadow:0 0 44px 20px rgba(255,236,170,.5)}
+.cl{position:absolute;height:22px;border-radius:20px;background:#fff;opacity:.9;left:-100px;animation:drift linear infinite}
+.cl::before,.cl::after{content:"";position:absolute;border-radius:50%;background:#fff}
+.cl::before{left:12px;top:-12px;width:30px;height:30px}.cl::after{left:36px;top:-8px;width:24px;height:24px}
+@keyframes drift{to{left:110%}}
+.hills{position:absolute;left:-10%;right:-10%;bottom:-30px;height:170px;background:radial-gradient(60% 100% at 18% 100%,#c3e6ac 98%,transparent 100%),radial-gradient(70% 100% at 78% 100%,#a9d698 98%,transparent 100%)}
+.front{position:absolute;left:-10%;right:-10%;bottom:-24px;height:96px;background:radial-gradient(80% 100% at 50% 100%,#8fc783 98%,transparent 100%)}
+.dhills{position:absolute;left:-10%;right:-10%;bottom:-40px;height:120px;background:radial-gradient(60% 100% at 25% 100%,#2a2566 98%,transparent 100%),radial-gradient(60% 100% at 80% 100%,#201b52 98%,transparent 100%)}
+.flw{position:absolute;left:0;right:0;bottom:8px;height:50px;background:radial-gradient(circle at 8% 40%,#ff9ec4 3px,transparent 4px),radial-gradient(circle at 21% 70%,#fff 3px,transparent 4px),radial-gradient(circle at 36% 35%,#ffd36b 3px,transparent 4px),radial-gradient(circle at 52% 78%,#ff9ec4 3px,transparent 4px),radial-gradient(circle at 67% 42%,#fff 3px,transparent 4px),radial-gradient(circle at 82% 72%,#c9b6ff 3px,transparent 4px),radial-gradient(circle at 94% 38%,#ffd36b 3px,transparent 4px)}
+.tree{position:absolute;bottom:64px;width:12px;height:70px;background:#a98763;border-radius:6px}
+.tree::before{content:"";position:absolute;left:-26px;top:-48px;width:64px;height:64px;border-radius:50%;background:#9fd18f;box-shadow:16px 14px 0 -6px #8fc783}
+.bfl{position:absolute;top:150px;width:22px;left:-30px;animation:bfly 15s linear infinite}
+.bfl svg{display:block;width:100%;animation:flap .22s ease-in-out infinite alternate}
+@keyframes bfly{25%{transform:translateY(-22px)}50%{transform:translateY(8px)}75%{transform:translateY(-14px)}100%{left:105%}}
+@keyframes flap{to{transform:scaleX(.55)}}
+.hud{position:absolute;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;gap:10px;pointer-events:none;color:var(--tx);text-shadow:0 1px 2px var(--ts);font-weight:800;font-size:.85rem}
+.hud>div{flex:1;max-width:48%}.hud .r{text-align:right;transition:opacity .4s}
+.arena.afk .hud .r,.arena.afk .timer{opacity:0}
+.hud small{font-weight:600;display:block}
+.bar{height:12px;border-radius:8px;background:rgba(0,0,0,.3);overflow:hidden;margin-top:3px;border:1.5px solid rgba(255,255,255,.7)}
+.bar i{display:block;height:100%;width:100%;background:var(--hp);transition:width .1s;margin-left:auto}
+.timer{position:absolute;top:0;left:0;height:6px;width:100%;background:#ffd45a;transition:opacity .4s}
+#msg{position:absolute;left:0;right:0;top:64px;text-align:center;font-weight:800;color:var(--tx);text-shadow:0 1px 3px var(--ts);pointer-events:none;font-size:1.05rem}
+.unit{position:absolute;bottom:26px;pointer-events:none;transition:left .6s,width .6s,transform .35s,opacity .5s}
+.unit svg{display:block;width:100%;height:auto}
+.arena.afk #hero{left:27%;width:46%}.arena.fight #hero{left:2%;width:42%}
+#boss{right:3%;width:43%;opacity:1}
+.arena.afk #boss{opacity:0;transform:translateX(60px)}
+.inner{animation:bob 3.2s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-6px)}}
+.bump{animation:bmp .14s}
+@keyframes bmp{50%{transform:scale(.95)}}
+.hit{animation:shk .25s}
+@keyframes shk{25%{transform:translateX(-8px)}60%{transform:translateX(7px)}}
+.dead{opacity:0!important;transform:translateY(40px) rotate(8deg)!important}
+.eyes{transform-box:fill-box;transform-origin:center;animation:blink 5s infinite}
+@keyframes blink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+.tail{transform-origin:150px 215px;animation:wag 2.4s ease-in-out infinite}
+@keyframes wag{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(8deg)}}
+.fl{position:absolute;pointer-events:none;font-weight:800;color:#fff;font-size:1.15rem;text-shadow:0 2px 3px rgba(0,0,0,.6);animation:up .8s ease-out forwards}
+.fl.c{color:#ffd45a;font-size:1.5rem}.fl.g{color:#fff;font-size:1rem;text-shadow:0 1px 3px rgba(60,80,50,.8)}
+@keyframes up{to{transform:translateY(-62px);opacity:0}}
+.fight-btn{display:block;width:100%;margin-top:10px;font:inherit;font-weight:800;font-size:1.05rem;min-height:58px;border-radius:18px;border:0;background:var(--accent);color:var(--onacc);cursor:pointer;line-height:1.2;padding:8px}
+.fight-btn small{display:block;font-weight:600;opacity:.85;font-size:.8rem}
+.fight-btn.off{background:var(--card);color:var(--ink);border:2px solid var(--line)}
+.goal{margin-top:10px;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:10px 12px;display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center}
+.goal b{font-size:.95rem}.goal small{color:var(--mute)}
+.pb{grid-column:1/-1;height:8px;border-radius:6px;background:var(--soft);overflow:hidden;margin-top:4px}
+.pb i{display:block;height:100%;width:0;background:var(--accent)}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:12px 0 8px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+button.tab{flex:0 0 auto;font:inherit;font-weight:800;color:var(--ink);background:var(--card);border:2px solid var(--line);border-radius:999px;padding:8px 16px;min-height:42px;cursor:pointer}
+button.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--onacc)}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.qty{display:flex;gap:6px;margin:0 0 8px}
+.qty button{flex:1;font:inherit;font-weight:800;color:var(--ink);background:var(--card);border:2px solid var(--line);border-radius:12px;min-height:38px;cursor:pointer}
+.qty button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
+.list{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:2px 14px}
+.it{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+.it:last-child{border-bottom:0}
+.it b{display:block}.it small{display:block;color:var(--mute);line-height:1.3}
+.lv{color:var(--accent)}
+.buy{font:inherit;font-weight:800;min-width:98px;min-height:46px;border-radius:14px;border:0;background:var(--accent);color:var(--onacc);padding:6px 12px;cursor:pointer;line-height:1.15}
+.buy:disabled{background:var(--soft);color:var(--mute);cursor:default}
+.buy.alt{background:var(--soft);color:var(--ink)}
+.note{color:var(--mute);padding:10px 0;margin:0}
+.toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:14px;opacity:0;pointer-events:none;transition:.25s;max-width:90vw;text-align:center;font-weight:800;z-index:5}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+:root{--b1:#ffe1ee;--b2:#dff3e6;--b3:#e5e0ff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--b1:#3b2441;--b2:#1d3a31;--b3:#272550}}
+:root[data-theme="dark"]{--b1:#3b2441;--b2:#1d3a31;--b3:#272550}
+body{min-height:100vh;background:radial-gradient(70% 45% at 8% 0%,var(--b1),transparent 72%),radial-gradient(60% 45% at 100% 22%,var(--b2),transparent 72%),radial-gradient(70% 45% at 0% 100%,var(--b3),transparent 72%),var(--bg);background-attachment:fixed}
+main{position:relative;z-index:1}
+.pt{position:fixed;top:-20px;border-radius:80% 0 80% 0;background:rgba(255,170,200,.55);pointer-events:none;z-index:0;animation:fall linear infinite}
+@keyframes fall{to{transform:translate(60px,110vh) rotate(360deg)}}
+.chip,.list,.goal{background:color-mix(in srgb,var(--card) 84%,transparent);backdrop-filter:blur(8px);box-shadow:0 8px 24px rgba(120,100,160,.12)}
+.arena{border-radius:30px;box-shadow:0 14px 34px rgba(110,90,150,.22)}
+.buy,.fight-btn:not(.off){background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 62%,#fff));box-shadow:0 5px 14px rgba(224,105,143,.3)}
+.buy:disabled{background:var(--soft);box-shadow:none}
+button.tab{box-shadow:0 3px 10px rgba(120,100,160,.1)}
+.fr{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:10px}
+.fr .fight-btn{margin-top:0}
+.sndb{font:inherit;font-weight:800;font-size:.85rem;min-width:66px;border-radius:18px;border:2px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;line-height:1.1}
+.sndb small{display:block;font-weight:600;color:var(--mute);font-size:.72rem}
+.cmp{position:absolute;width:7.8%;min-width:30px;aspect-ratio:40/44;pointer-events:none;transition:left .6s,bottom .6s;animation:cbob 2.4s ease-in-out infinite}
+.arena.afk .cmp{left:var(--ax);bottom:var(--ab)}
+.arena.fight .cmp{left:var(--fx);bottom:var(--fb)}
+.cmp svg{display:block;width:100%;height:auto;filter:drop-shadow(0 2px 2px rgba(0,0,0,.18))}
+.cmp i{position:absolute;right:-5px;bottom:-3px;font:800 .62rem/1 Nunito,sans-serif;font-style:normal;background:var(--card);color:var(--ink);border-radius:8px;padding:2px 4px;border:1px solid var(--line)}
+@keyframes cbob{50%{transform:translateY(-3px)}}
+.cmp.hop{animation:hop .26s}
+@keyframes hop{50%{transform:translateY(-14px)}}
+.br{transform-origin:120px 246px;animation:brth 3.6s ease-in-out infinite}
+@keyframes brth{50%{transform:scaleY(1.016)}}
+.head{transform-origin:120px 152px;animation:tilt 6.5s ease-in-out infinite}
+@keyframes tilt{0%,100%{transform:rotate(-1.6deg)}50%{transform:rotate(2deg)}}
+.hairs{transform-origin:120px 90px;animation:hsw 5s ease-in-out infinite}
+@keyframes hsw{0%,100%{transform:rotate(-1.2deg)}50%{transform:rotate(1.4deg)}}
+.earL{transform-origin:92px 62px;animation:twl 7s infinite}
+.earR{transform-origin:148px 62px;animation:twr 9s infinite 2.5s}
+@keyframes twl{0%,90%,100%{transform:rotate(0)}93%{transform:rotate(-9deg)}96%{transform:rotate(3deg)}}
+@keyframes twr{0%,90%,100%{transform:rotate(0)}93%{transform:rotate(9deg)}96%{transform:rotate(-3deg)}}
+.look{animation:look 9s ease-in-out infinite}
+@keyframes look{0%,35%,100%{transform:translate(0,0)}42%,58%{transform:translate(-2.5px,1px)}68%,85%{transform:translate(2.5px,0)}}
+.wh{transform-origin:120px 130px;animation:whs 4s ease-in-out infinite}
+@keyframes whs{50%{transform:rotate(1.5deg)}}
+.eh,.mo{display:none}
+.meow .mo{display:inline}.meow .mc{display:none}.happy .eyes{display:none}.happy .eh{display:inline}
+.say{position:absolute;right:4%;top:92px;max-width:46%;background:#fff;color:#2b2748;border-radius:16px;padding:7px 11px;font-weight:700;font-size:.82rem;line-height:1.25;box-shadow:0 6px 16px rgba(0,0,0,.25);opacity:0;transform:translateY(6px) scale(.96);transition:.25s;pointer-events:none;z-index:3}
+.say.on{opacity:1;transform:none}
+.say::after{content:"";position:absolute;bottom:-7px;right:30px;border:8px solid transparent;border-top-color:#fff;border-bottom:0}
+.fight-bg::before{display:none}
+.fight-bg{background:#e3f1ed}
+.fight-bg svg{display:block;width:100%;height:100%}
+.arena.fight{--tx:#2b3a46;--ts:rgba(255,255,255,.85)}
+.path{font-weight:800;color:var(--mute);font-size:.9rem;white-space:nowrap}
+.ov{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(40,30,70,.45);backdrop-filter:blur(6px)}
+.ov[hidden]{display:none}
+.dlg{width:min(360px,100%);background:var(--card);border-radius:24px;padding:22px 20px;box-shadow:0 20px 50px rgba(0,0,0,.3);text-align:center}
+.dlg h2{margin:0 0 6px;font-size:1.3rem}
+.dlg p{margin:0 0 14px;color:var(--mute)}
+.dlg input{width:100%;font:inherit;font-weight:700;text-align:center;color:var(--ink);background:var(--soft);border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:12px}
+.dlg input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.dlg .buy{width:100%}
+.dev{margin-top:16px;background:var(--card);border:2px dashed var(--accent);border-radius:18px;padding:12px;font-size:.85rem}
+.dev[hidden]{display:none}
+.dev h3{margin:0 0 6px}
+.dg{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
+.dg b{min-width:60px}
+.dev button{font:inherit;font-weight:700;border:1.5px solid var(--line);background:var(--soft);color:var(--ink);border-radius:10px;padding:6px 10px;min-height:36px;cursor:pointer}
+.dev button.on{background:var(--accent);color:var(--onacc);border-color:var(--accent)}
+.dev input[type=number]{width:72px;font:inherit;border:1.5px solid var(--line);border-radius:10px;padding:6px;background:var(--soft);color:var(--ink)}
+.dev textarea{width:100%;min-height:70px;font:12px monospace;border-radius:10px;border:1.5px solid var(--line);background:var(--soft);color:var(--ink)}
+.dvt{max-height:240px;overflow:auto;border:1px solid var(--line);border-radius:10px;margin-bottom:8px}
+.dvt table{width:100%;border-collapse:collapse;font-size:.78rem}
+.dvt td,.dvt th{padding:3px 6px;text-align:left;border-bottom:1px solid var(--line)}
+.tk{color:#2a9d62}.tm{color:#c98a0b}.tb{color:#d33}
+.spk{position:absolute;width:54px;height:54px;padding:0;border:0;background:none;cursor:pointer;z-index:4;filter:drop-shadow(0 0 8px rgba(255,220,120,.95));animation:spf 1.2s ease-in-out infinite alternate}
+@keyframes spf{to{transform:translateY(-10px) rotate(8deg)}}
+.cmb{position:absolute;left:12px;top:92px;z-index:2;pointer-events:none;background:rgba(255,255,255,.85);color:#b9590b;font-weight:800;font-size:.8rem;padding:3px 10px;border-radius:999px;opacity:0;transition:opacity .25s}
+.skills{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.skills[hidden]{display:none}
+.sk{position:relative;overflow:hidden;font:inherit;font-weight:800;color:var(--ink);background:var(--card);border:2px solid var(--line);border-radius:16px;min-height:54px;padding:6px;cursor:pointer;line-height:1.15;touch-action:manipulation}
+.sk small{display:block;font-weight:600;color:var(--mute);font-size:.74rem}
+.sk:disabled{opacity:.55;cursor:default}
+.sk:not(:disabled){border-color:var(--accent)}
+.sk i{position:absolute;left:0;bottom:0;height:5px;background:var(--accent)}
+.wk{position:absolute;width:44px;height:44px;border-radius:50%;border:3px solid #ffd45a;background:rgba(255,212,90,.28);z-index:4;padding:0;cursor:pointer;transition:left .25s,top .25s;animation:wkp .6s ease-in-out infinite alternate}
+@keyframes wkp{to{transform:scale(1.2);box-shadow:0 0 16px #ffd45a}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<main>
+  <div class="bar0"><div class="chip"><b id="fish">0</b> рыбок<small id="ps"></small></div><div class="path" id="path" aria-label="Путь по боссам"></div></div>
+  <div class="arena afk" id="arena">
+    <div class="bg afk-bg"><i class="sun"></i><i class="cl" style="top:40px;width:72px;animation-duration:70s"></i><i class="cl" style="top:84px;width:52px;animation-duration:95s;animation-delay:-40s"></i><i class="cl" style="top:20px;width:60px;animation-duration:120s;animation-delay:-80s"></i><div class="hills"></div><i class="tree" style="left:6%"></i><i class="tree" style="right:7%;height:58px"></i><div class="front"></div><div class="flw"></div>
+      <div class="bfl"><svg viewBox="0 0 24 24"><ellipse cx="7" cy="8" rx="6" ry="7" fill="#ff9ec4"/><ellipse cx="17" cy="8" rx="6" ry="7" fill="#8ec5ff"/><ellipse cx="8" cy="17" rx="4" ry="4.5" fill="#ffd36b"/><ellipse cx="16" cy="17" rx="4" ry="4.5" fill="#b7f0c0"/><rect x="11" y="5" width="2" height="15" rx="1" fill="#4a3d5e"/></svg></div></div>
+    <div class="bg fight-bg" id="fbg"></div>
+    <div class="timer" id="tm"></div>
+    <div class="hud">
+      <div><span id="hn"></span><small id="hd"></small></div>
+      <div class="r"><span id="bn"></span><div class="bar"><i id="bhp"></i></div><small id="bht"></small></div>
+    </div>
+    <div id="msg"></div>
+    <div id="cmb" class="cmb"></div>
+    <div id="say" class="say"></div>
+    <div class="unit" id="hero"><div class="inner">
+<svg viewBox="0 0 240 260" aria-hidden="true" id="catsvg">
+<defs>
+<linearGradient id="fur" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffaf1"/><stop offset="1" stop-color="#f1e1c6"/></linearGradient>
+<linearGradient id="hair" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d0b07c"/><stop offset="1" stop-color="#a68350"/></linearGradient>
+<radialGradient id="iris" cx=".5" cy=".3" r=".75"><stop offset="0" stop-color="#78936a"/><stop offset="1" stop-color="#29452f"/></radialGradient>
+<linearGradient id="dress" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f9cadc"/><stop offset="1" stop-color="#ee9dbb"/></linearGradient>
+</defs>
+<ellipse cx="120" cy="248" rx="72" ry="9" fill="#000" opacity=".12"/>
+<g id="l-wing"><path d="M118 150C60 90 22 112 12 68c48 0 92 24 108 64z" fill="#fff" opacity=".9" stroke="#cfd8f0"/><path d="M122 150c58-60 96-38 106-82-48 0-92 24-108 64z" fill="#fff" opacity=".9" stroke="#cfd8f0"/></g>
+<g class="tail"><path d="M150 220C204 232 232 190 216 152C210 138 198 134 192 140" stroke="#efdfc3" stroke-width="15" fill="none" stroke-linecap="round"/><path d="M216 152C210 138 198 134 192 140" stroke="#fffaf1" stroke-width="15" fill="none" stroke-linecap="round"/></g>
+<g class="hairs"><path d="M64 94C38 140 44 192 72 218C62 176 74 134 88 108z" fill="url(#hair)"/><path d="M176 94C202 140 196 192 168 218C178 176 166 134 152 108z" fill="url(#hair)"/></g>
+<g class="br">
+<path d="M86 158Q120 148 154 158L184 240Q120 256 56 240Z" fill="url(#dress)"/>
+<path d="M60 232Q72 244 84 236Q96 248 108 240Q120 250 132 240Q144 248 156 236Q168 244 180 232" stroke="#fff" stroke-width="3" fill="none" opacity=".75" stroke-linecap="round"/>
+<path d="M96 190Q120 202 144 190" stroke="#fff" stroke-width="2" fill="none" opacity=".55"/>
+<g id="l-coat"><path d="M84 158Q120 148 156 158L190 244Q120 260 50 244Z" fill="#fff" stroke="#d6e0f0" stroke-width="2"/><path d="M120 160L110 248M120 160L130 248" stroke="#e1e9f5" stroke-width="2"/><path d="M100 154L120 198L102 204L90 170zM140 154L120 198L138 204L150 170z" fill="#fff" stroke="#d6e0f0" stroke-width="2"/><path d="M104 162Q94 192 112 198Q128 200 134 186" stroke="#6b7a90" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="134" cy="186" r="4.5" fill="#9aa9bd"/><rect x="138" y="212" width="20" height="18" rx="3" fill="none" stroke="#c9d6ea" stroke-width="2"/><path d="M146 206v10M151 208v8" stroke="#e0457b" stroke-width="2.5" stroke-linecap="round"/><rect x="80" y="208" width="18" height="10" rx="2" fill="#e8f3ff" stroke="#b9cbe3"/></g>
+<ellipse cx="102" cy="178" rx="10" ry="8" fill="url(#fur)"/><ellipse cx="138" cy="178" rx="10" ry="8" fill="url(#fur)"/>
+<ellipse cx="98" cy="243" rx="15" ry="8" fill="url(#fur)"/><ellipse cx="142" cy="243" rx="15" ry="8" fill="url(#fur)"/>
+<path d="M100 157Q120 172 140 157L134 148Q120 160 106 148Z" fill="#fff"/>
+<g class="head">
+<g class="earL"><path d="M66 74L68 22l42 32z" fill="url(#fur)"/><path d="M75 60l1-24 22 17z" fill="#f4b6c6"/><path d="M80 52l.5-12 11 8z" fill="#e99ab0" opacity=".6"/></g>
+<g class="earR"><path d="M174 74l-2-52-42 32z" fill="url(#fur)"/><path d="M165 60l-1-24-22 17z" fill="#f4b6c6"/><path d="M160 52l-.5-12-11 8z" fill="#e99ab0" opacity=".6"/></g>
+<ellipse cx="120" cy="102" rx="62" ry="53" fill="url(#fur)"/>
+<ellipse cx="120" cy="120" rx="44" ry="28" fill="#fff" opacity=".35"/>
+<path d="M62 92C50 130 56 160 76 170C68 140 76 112 84 98z" fill="url(#hair)"/><path d="M178 92C190 130 184 160 164 170C172 140 164 112 156 98z" fill="url(#hair)"/>
+<path d="M56 106C46 58 84 40 120 40C156 40 194 58 184 106C178 100 174 98 170 98C160 100 150 96 142 92C130 96 112 92 100 88C90 90 78 92 70 98C64 102 60 106 56 106z" fill="url(#hair)"/>
+<path d="M84 52Q112 58 150 90M104 46Q134 54 172 92M70 62Q92 72 104 90M120 42Q150 48 180 80" stroke="#e5cc9e" stroke-width="2" fill="none" stroke-linecap="round" opacity=".8"/>
+<g class="look"><g class="eyes">
+<ellipse cx="94" cy="110" rx="12" ry="15" fill="#fff"/><ellipse cx="95" cy="112" rx="9.5" ry="12" fill="url(#iris)"/><ellipse cx="95" cy="113" rx="4.5" ry="6.5" fill="#1b2840"/><circle cx="99" cy="106" r="3.2" fill="#fff"/><circle cx="91" cy="117" r="1.6" fill="#fff" opacity=".8"/>
+<ellipse cx="146" cy="110" rx="12" ry="15" fill="#fff"/><ellipse cx="145" cy="112" rx="9.5" ry="12" fill="url(#iris)"/><ellipse cx="145" cy="113" rx="4.5" ry="6.5" fill="#1b2840"/><circle cx="149" cy="106" r="3.2" fill="#fff"/><circle cx="141" cy="117" r="1.6" fill="#fff" opacity=".8"/>
+<path d="M82 100Q94 93 106 100M134 100Q146 93 158 100" stroke="#3a2f3a" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M83 101l-6-4M157 101l6-4" stroke="#3a2f3a" stroke-width="2" stroke-linecap="round"/></g></g>
+<g class="eh"><path d="M83 114Q94 101 105 114M135 114Q146 101 157 114" stroke="#3a2f3a" stroke-width="3.5" fill="none" stroke-linecap="round"/></g>
+<ellipse cx="78" cy="131" rx="10" ry="5.5" fill="#f9a3b4" opacity=".55"/><ellipse cx="162" cy="131" rx="10" ry="5.5" fill="#f9a3b4" opacity=".55"/>
+<path d="M114 125Q120 131 126 125Q120 120 114 125z" fill="#ef8aa5"/>
+<path class="mc" d="M120 130Q116 139 109 137M120 130Q124 139 131 137" stroke="#8a5a6a" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<g class="mo"><path d="M109 131Q120 135 131 131Q129 149 120 149Q111 149 109 131Z" fill="#7a2f45"/><path d="M114 142Q120 147 126 142Q124 148 120 148Q116 148 114 142Z" fill="#f08aa4"/></g>
+<g class="wh"><path d="M54 124l26 3M52 135l26-4M186 124l-26 3M188 135l-26-4" stroke="#c9b9a4" stroke-width="1.6" stroke-linecap="round"/></g>
+<g id="l-glasses"><circle cx="94" cy="110" r="18" fill="none" stroke="#3a3350" stroke-width="3"/><circle cx="146" cy="110" r="18" fill="none" stroke="#3a3350" stroke-width="3"/><path d="M112 110h16" stroke="#3a3350" stroke-width="3"/></g>
+<g id="l-bow"><path d="M76 40l20 8-20 10zM116 40l-20 8 20 10z" fill="#ff7fa8"/><circle cx="96" cy="48" r="6" fill="#e8527f"/></g>
+<g id="l-hat"><ellipse cx="120" cy="54" rx="44" ry="13" fill="#7aa8e0"/><path d="M84 54Q120 6 156 54z" fill="#7aa8e0"/><circle cx="120" cy="14" r="5" fill="#5b86bd"/></g>
+<g id="l-crown"><path d="M92 46l4-28 12 18 12-24 12 24 12-18 4 28z" fill="#ffd45a" stroke="#e0a928" stroke-width="2"/><circle cx="120" cy="38" r="4" fill="#e8527f"/></g>
+</g>
+<g id="l-scarf"><path d="M90 150Q120 170 150 150L148 164Q120 184 92 164z" fill="#6fb7c9"/><path d="M136 168l8 32-16-4z" fill="#58a2b6"/></g>
+</g>
+</svg></div>
+    </div>
+    <div class="unit" id="boss"></div>
+    <div id="crew"></div>
+  </div>
+  <div class="skills" id="skills" hidden><button class="sk" id="sk0"></button><button class="sk" id="sk1"></button></div>
+  <div class="fr"><button class="fight-btn" id="fightbtn"></button><button class="sndb" id="snd"></button></div>
+  <div class="goal" id="goal"></div>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <div class="qty" id="qty"></div>
+  <div class="list" id="list"></div>
+  <div class="dev" id="dev" hidden></div>
+</main>
+<div class="ov" id="ov" role="dialog" aria-modal="true" aria-labelledby="ovt" hidden><div class="dlg"><h2 id="ovt">Как зовут героиню?</h2><p>Придумай ей любое имя, оно будет в игре.</p><input id="nmi" maxlength="14" placeholder="Например, Мурка" autocomplete="off"><button class="buy" id="nmb">Начать игру</button></div></div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var UN=['','тыс.','млн','млрд','трлн','квадр.','квинт.','секст.'];
+function F(n){if(n<1e3)return n>=100||n===Math.floor(n)?String(Math.floor(n)):n.toFixed(1);var e=Math.min(Math.floor(Math.log10(n)/3),UN.length-1),v=n/Math.pow(1000,e);return(v<10?v.toFixed(2):v<100?v.toFixed(1):String(Math.floor(v)))+' '+UN[e]}
+var H=[
+{t:'e',n:'Котёнок-мурлыка',d:'Мурчит и приносит рыбки',b:15,v:.2},
+{t:'e',n:'Рыбак',d:'Ловит рыбу на рассвете',b:120,v:1.5},
+{t:'e',n:'Кофейня «Мур»',d:'Гости оставляют рыбки на чай',b:1300,v:9},
+{t:'e',n:'Садовница',d:'Мята растёт сама',b:14000,v:55},
+{t:'e',n:'Кинотеатр',d:'Билеты в рыбках',b:1.5e5,v:300},
+{t:'e',n:'Космопорт',d:'Рейсы за лунной рыбкой',b:2e6,v:1700},
+{t:'f',n:'Котёнок-воин',d:'Бьёт вместе с героиней',b:50,v:1},
+{t:'f',n:'Мышь-лучница',d:'Стрела в каждый клик',b:400,v:4},
+{t:'f',n:'Сова-волшебница',d:'Магия усиливает удар',b:3000,v:18},
+{t:'f',n:'Пёс-рыцарь',d:'Тяжёлый удар мечом',b:25000,v:80},
+{t:'f',n:'Дракончик',d:'Огненное дыхание',b:2e5,v:350},
+{t:'s',n:'Лиса-часовщица',d:'+0,4 с к времени боя (максимум +5 с)',b:200,k:'time'},
+{t:'s',n:'Ёжик-точильщик',d:'+1% к шансу крита',b:1500,k:'crit'},
+{t:'s',n:'Кот-бард',d:'+4% к урону клика',b:12000,k:'bard'}];
+var ST=[['atk','Сила','Урон за клик'],['agi','Ловкость','Шанс критического клика'],['mag','Меткость','Сила критического клика'],['end','Выдержка','Больше времени на бой'],['luck','Удача','Больше рыбок за клики и клиентов']];
+var WD=[{n:'Бантик',c:100,k:'bow'},{n:'Шарфик',c:2500,k:'scarf'},{n:'Очки',c:3e4,k:'glasses'},{n:'Шляпка',c:3e5,k:'hat'},{n:'Корона',c:5e6,k:'crown'},{n:'Крылышки',c:1e8,k:'wing'},{n:'Врачебный халат',c:1e4,k:'coat'}];
+var DEF=['Ладно, куплю в другой аптеке!','Ну хорошо, беру...','Ой, вы меня убедили.','Спасибо, девушка, всё понятно.'],nextSay=0;
+var BO=[
+{n:'Бабушка-скидочница',sk:'#f3d3b8',cl:'#b567a8',hp:40,l:['Деточка, а подешевле нет?','А по пенсионному скидка какая?','Раньше это копейки стоило!'],
+x:'<path d="M44 66Q44 28 80 28Q116 28 116 66Q106 44 80 44Q54 44 44 66Z" fill="#d94f6a"/><path d="M44 66Q38 82 48 92L58 70zM116 66Q122 82 112 92L102 70z" fill="#d94f6a"/><circle cx="64" cy="36" r="3" fill="#fff"/><circle cx="84" cy="32" r="3" fill="#fff"/><circle cx="100" cy="38" r="3" fill="#fff"/>',
+y:'<circle cx="66" cy="64" r="11" fill="none" stroke="#6b4a3a" stroke-width="2.5"/><circle cx="94" cy="64" r="11" fill="none" stroke="#6b4a3a" stroke-width="2.5"/><path d="M77 64h6" stroke="#6b4a3a" stroke-width="2.5"/><rect x="108" y="128" width="34" height="24" rx="5" fill="#8a5a3a"/><path d="M116 128q9-14 18 0" stroke="#8a5a3a" stroke-width="4" fill="none"/>'},
+{n:'Дедушка с рецептом 1987 года',sk:'#efcdb0',cl:'#6b8a9a',hp:180,l:['Я сорок лет это пью, и ничего!','Рецепт старый, зато проверенный!','Внученька, давление померь, а?'],
+x:'<path d="M46 66Q42 46 54 40L52 72zM114 66Q118 46 106 40L108 72z" fill="#eee"/>',
+y:'<path d="M64 82Q80 72 96 82Q86 88 80 84Q74 88 64 82z" fill="#f2f2f2" stroke="#d6d6d6"/><path d="M140 152V118q0-10 10-10" stroke="#8a5a3a" stroke-width="5" fill="none" stroke-linecap="round"/>'},
+{n:'Весёлый дядя с боярышником',sk:'#f0b9a0',cl:'#5f6b78',hp:800,l:['Мне для сердца! Боярышник, три флакона!','Я не пьяный, это давление!','Спиртовую дайте, для компресса!'],
+x:'<path d="M46 56Q48 30 80 30Q112 30 114 56Q100 40 80 46Q60 40 46 56z" fill="#5b4636"/>',
+y:'<circle cx="58" cy="80" r="6" fill="#ee7f7f" opacity=".6"/><circle cx="102" cy="80" r="6" fill="#ee7f7f" opacity=".6"/><circle cx="80" cy="76" r="7" fill="#e5605a"/><rect x="122" y="108" width="16" height="42" rx="5" fill="#7fb06a"/><rect x="126" y="98" width="8" height="12" rx="2" fill="#7fb06a"/><rect x="124" y="122" width="12" height="14" fill="#fff" opacity=".8"/>'},
+{n:'Парень из тиктока',sk:'#f2c9a5',cl:'#3f6fb5',hp:3600,l:['Короч, дайте чё-нибудь от всего.','Это точно поможет? Я в тиктоке видел.','Ну а чё по цене, дорого же!'],
+x:'<path d="M44 58Q46 28 80 28Q114 28 116 58z" fill="#2b2f45"/><path d="M104 56h32q-6 10-32 8z" fill="#2b2f45"/>',
+y:'<path d="M46 66Q46 30 80 30Q114 30 114 66" stroke="#444" stroke-width="5" fill="none"/><rect x="40" y="58" width="12" height="20" rx="5" fill="#e0457b"/><rect x="108" y="58" width="12" height="20" rx="5" fill="#e0457b"/><rect x="22" y="118" width="18" height="30" rx="4" fill="#222"/><rect x="25" y="122" width="12" height="20" fill="#6fc7ff"/>'},
+{n:'Мамочка-жалобщица',sk:'#f6d2b8',cl:'#6dbf9a',hp:1.6e4,l:['Ребёнок кашляет! Дайте самое сильное!','Почему так дорого?! Напишу жалобу!','У меня нет времени, быстрее!'],
+x:'<path d="M44 62Q44 28 80 28Q116 28 116 62Q104 42 80 46Q56 42 44 62z" fill="#8a5a3a"/><circle cx="80" cy="22" r="12" fill="#8a5a3a"/>',
+y:'<path d="M58 74Q66 78 74 74M86 74Q94 78 102 74" stroke="#b58aa0" stroke-width="2.5" fill="none"/><rect x="112" y="118" width="34" height="30" rx="12" fill="#ffd6a8"/><circle cx="129" cy="114" r="11" fill="#f6d2b8"/><circle cx="125" cy="113" r="1.6" fill="#333"/><circle cx="133" cy="113" r="1.6" fill="#333"/>'},
+{n:'Блогер-эксперт',sk:'#e8c19e',cl:'#ff9b4d',hp:7.2e4,l:['Я в интернете читал, там всё по-другому!','Можно снять вас для сторис?','Это же химия, дайте травки какие-нибудь!'],
+x:'<path d="M46 60Q44 24 84 26Q116 28 114 58Q100 40 78 44Q58 44 46 60z" fill="#2a2430"/><path d="M80 26q10-14 22-8" stroke="#2a2430" stroke-width="6" fill="none"/>',
+y:'<rect x="54" y="56" width="24" height="18" rx="5" fill="none" stroke="#2a2430" stroke-width="3"/><rect x="82" y="56" width="24" height="18" rx="5" fill="none" stroke="#2a2430" stroke-width="3"/><path d="M74 94Q80 102 86 94z" fill="#2a2430"/><circle cx="134" cy="52" r="18" fill="none" stroke="#fff" stroke-width="5"/><rect x="131" y="68" width="6" height="48" fill="#555"/>'},
+{n:'Нервный клиент без рецепта',sk:'#e9c4a6',cl:'#555b66',hp:3.2e5,l:['Мне по рецепту... но я его потерял.','Ну вы же всё понимаете, да?','Я врач, честно! Просто без документов.'],
+x:'<path d="M40 66Q36 20 80 22Q124 20 120 66Q112 36 80 38Q48 36 40 66z" fill="#454b57"/>',
+y:'<path d="M58 74Q66 78 74 74M86 74Q94 78 102 74" stroke="#8a6f8a" stroke-width="3" fill="none"/><path d="M118 52q4 8 0 10q-4-2 0-10z" fill="#9edcff"/><rect x="112" y="112" width="30" height="38" rx="3" fill="#fff"/><path d="M118 122h18M118 130h18M118 138h12" stroke="#bbb" stroke-width="3"/>'},
+{n:'Дама с собачкой и претензиями',sk:'#f4d5c1',cl:'#c75d8c',hp:1.4e6,l:['Почему нет моего любимого бренда?!','Позовите заведующую!','В прошлый раз тут было дешевле!'],
+x:'<circle cx="46" cy="72" r="9" fill="#cfcfd8"/><circle cx="114" cy="72" r="9" fill="#cfcfd8"/><ellipse cx="80" cy="40" rx="52" ry="11" fill="#e8c36a"/><path d="M52 40Q56 10 80 10Q104 10 108 40z" fill="#e8c36a"/><path d="M54 36h52" stroke="#c75d8c" stroke-width="5"/>',
+y:'<path d="M70 90Q80 98 90 90" stroke="#d33" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M56 112Q80 128 104 112" stroke="#fff" stroke-width="4" stroke-dasharray="1 7" stroke-linecap="round" fill="none"/><ellipse cx="128" cy="142" rx="18" ry="12" fill="#fff"/><circle cx="142" cy="130" r="10" fill="#fff"/><circle cx="145" cy="128" r="1.8" fill="#222"/><path d="M134 124l-4-8 8 4z" fill="#f2b8c6"/>'},
+{n:'Дедуля-ворчун из очереди',sk:'#e6c3a5',cl:'#7a7f4a',hp:6.5e6,l:['Почему одна касса?! Раньше было иначе!','Я тут с утра стою, девушка!','Вот раньше фармацевты не болтали!'],
+x:'<path d="M44 52Q48 26 80 26Q112 26 116 52z" fill="#6b5a3e"/><path d="M96 50h34q-4 10-34 8z" fill="#6b5a3e"/>',
+y:'<path d="M50 48L76 58M110 48L84 58" stroke="#d5d5d5" stroke-width="6" stroke-linecap="round"/><path d="M62 82Q80 74 98 82Q88 92 80 86Q72 92 62 82z" fill="#cfcfcf"/><rect x="112" y="116" width="28" height="22" rx="3" fill="#fff"/><path d="M120 124h14M120 130h14" stroke="#c33" stroke-width="3"/>'},
+{n:'Проверяющий из ведомства',sk:'#f0cdb0',cl:'#2f3e5a',hp:3e7,l:['Покажите журнал учёта. Немедленно.','Это нарушение. Будем составлять протокол.','Проверю всё до последней таблетки!'],
+x:'<path d="M46 56Q48 28 80 28Q112 28 114 56Q98 40 80 46Q62 40 46 56z" fill="#3a3a3a"/>',
+y:'<rect x="54" y="56" width="24" height="16" rx="3" fill="none" stroke="#222" stroke-width="3"/><rect x="82" y="56" width="24" height="16" rx="3" fill="none" stroke="#222" stroke-width="3"/><path d="M78 62h4" stroke="#222" stroke-width="3"/><path d="M62 108l18 12 18-12" stroke="#fff" stroke-width="5" fill="none"/><path d="M74 112h12l-3 30h-6z" fill="#c33"/><rect x="110" y="112" width="34" height="42" rx="4" fill="#d9b27a"/><rect x="118" y="108" width="18" height="8" rx="2" fill="#777"/><rect x="115" y="122" width="24" height="28" fill="#fff"/><path d="M119 130h16M119 137h16M119 144h10" stroke="#999" stroke-width="2.5"/>'},
+{n:'Бабуля со всеми болячками',sk:'#f4d9c3',cl:'#e8a0b8',hp:1.4e8,l:['У меня тут всё болит, записывай!','А у соседки Валентины то же самое!','Дай-ка от всего понемножку, милая.'],
+x:'<circle cx="52" cy="40" r="14" fill="#b9c8e6"/><circle cx="72" cy="30" r="15" fill="#b9c8e6"/><circle cx="94" cy="30" r="15" fill="#b9c8e6"/><circle cx="110" cy="42" r="14" fill="#b9c8e6"/><circle cx="46" cy="62" r="9" fill="#b9c8e6"/><circle cx="114" cy="62" r="9" fill="#b9c8e6"/>',
+y:'<circle cx="80" cy="118" r="6" fill="#ffd45a"/><rect x="112" y="116" width="30" height="36" rx="4" fill="#4f9d8a"/><path d="M118 116V106h18v10" stroke="#333" stroke-width="3" fill="none"/><circle cx="120" cy="156" r="4" fill="#333"/><circle cx="136" cy="156" r="4" fill="#333"/>'},
+{n:'Дед-рыболов за сугревом',sk:'#e2b896',cl:'#5a7a5a',hp:6e8,l:['Мне бы для сугрева, дочка!','Рыба не клюёт, нервы лечу!','Йод есть? Дай два!'],
+x:'<ellipse cx="80" cy="38" rx="50" ry="10" fill="#c9b27a"/><path d="M52 38Q56 14 80 14Q104 14 108 38z" fill="#c9b27a"/><path d="M60 30l-6-6M66 26l-2-8" stroke="#d94f6a" stroke-width="3"/>',
+y:'<path d="M50 78Q52 108 80 112Q108 108 110 78Q96 94 80 92Q64 94 50 78z" fill="#eee"/><path d="M142 156L132 70" stroke="#8a5a3a" stroke-width="3"/><path d="M132 70Q150 70 150 100" stroke="#999" stroke-width="1.5" fill="none"/><path d="M150 100l-4 8h8z" fill="#7fc7e8"/>'},
+{n:'Студент перед сессией',sk:'#f0cfb2',cl:'#8f8fe0',hp:2.6e9,l:['Дайте что-нибудь, чтоб не спать до сессии!','А это без побочек? Мне ещё сдавать!','Чё по скидке для студентов?'],
+x:'<path d="M46 58Q40 26 62 26L70 18L80 28L92 16L102 28Q122 28 114 58Q100 38 80 44Q60 38 46 58z" fill="#3b2f2f"/>',
+y:'<path d="M58 76Q66 80 74 76M86 76Q94 80 102 76" stroke="#8a6f8a" stroke-width="3" fill="none"/><path d="M44 118L50 160M116 118L110 160" stroke="#2a8a7a" stroke-width="8"/><rect x="120" y="116" width="16" height="30" rx="3" fill="#2a2a2a"/><rect x="120" y="126" width="16" height="10" fill="#6fe07a"/>'},
+{n:'Качок с протеином',sk:'#d9a679',cl:'#e0554a',hp:1.1e10,l:['Бро, а креатин у вас есть?','Дайте самое мощное, я качаюсь!','Мне без рецепта, я всё знаю!'],
+x:'<path d="M46 54Q48 30 80 30Q112 30 114 54Q100 42 80 44Q60 42 46 54z" fill="#222"/><rect x="46" y="44" width="68" height="8" fill="#fff"/>',
+y:'<circle cx="22" cy="132" r="18" fill="#d9a679"/><circle cx="138" cy="132" r="18" fill="#d9a679"/><rect x="112" y="108" width="18" height="30" rx="5" fill="#cfe9ff" stroke="#fff"/><rect x="112" y="102" width="18" height="8" rx="2" fill="#333"/>'},
+{n:'Деловая дама с мигренью',sk:'#f6d6c0',cl:'#4e6aa8',hp:5e10,l:['Мне срочно от головы, у меня совещание!','Я вам сейчас всё объясню по телефону!','Можно побыстрее? Я опаздываю!'],
+x:'<path d="M46 56Q48 28 80 28Q112 28 114 56Q100 40 80 46Q60 40 46 56z" fill="#3a2a22"/><path d="M114 50Q150 50 140 100Q136 70 114 66z" fill="#3a2a22"/>',
+y:'<rect x="112" y="52" width="10" height="24" rx="3" fill="#222"/><path d="M64 112l16 14 16-14" stroke="#fff" stroke-width="5" fill="none"/><rect x="108" y="132" width="34" height="22" rx="4" fill="#6b4a3a"/>'},
+{n:'Утренний клиент с мелочью',sk:'#e8b99c',cl:'#a89f7a',hp:2.2e11,l:['Девушка, мне от головы... вчера был день рождения.','Мелочью можно? Тут сто рублей десятками.','Говорите потише, пожалуйста...'],
+x:'<path d="M48 60Q40 34 66 30L72 20L84 30L98 22L106 32Q124 38 112 60Q100 44 80 48Q62 44 48 60z" fill="#6b625a"/>',
+y:'<path d="M62 84Q80 98 98 84" fill="#000" opacity=".15"/><circle cx="80" cy="76" r="5" fill="#e07a6a"/><circle cx="128" cy="132" r="7" fill="#e6c25a"/><circle cx="140" cy="140" r="7" fill="#d9b24a"/><circle cx="124" cy="146" r="7" fill="#e6c25a"/>'},
+{n:'Тревожный клиент со странной просьбой',sk:'#e8d2c0',cl:'#3d4a4a',hp:1e12,l:['Мне вот это... сильное... по рецепту, да...','А можно по одной таблетке продать?','Я быстро, никто не узнает!'],
+x:'<path d="M44 58Q46 24 80 24Q114 24 116 58z" fill="#a85a3a"/><rect x="42" y="52" width="76" height="10" rx="5" fill="#8a4a2e"/>',
+y:'<circle cx="66" cy="64" r="11" fill="#fff"/><circle cx="94" cy="64" r="11" fill="#fff"/><circle cx="66" cy="64" r="2.5" fill="#222"/><circle cx="94" cy="64" r="2.5" fill="#222"/><path d="M116 126l8-4M116 134h10M116 142l8 4" stroke="#999" stroke-width="2"/><circle cx="132" cy="134" r="8" fill="#e8d2c0"/>'},
+{n:'Пенсионерка-активистка',sk:'#f0d3bd',cl:'#8a6fb0',hp:4.5e12,l:['Дайте жалобную книгу, я всё запишу!','Я тридцать лет в профкоме!','Я в районной газете напишу!'],
+x:'<path d="M46 60Q46 30 80 30Q114 30 114 60Q100 42 80 46Q60 42 46 60z" fill="#c9c9d3"/><circle cx="80" cy="22" r="12" fill="#c9c9d3"/><circle cx="104" cy="34" r="6" fill="#ff7fa8"/><circle cx="110" cy="40" r="5" fill="#ffd36b"/>',
+y:'<path d="M54 60l22 4v10q-14 4-22-6zM106 60l-22 4v10q14 4 22-6z" fill="none" stroke="#7a2f5a" stroke-width="3"/><rect x="108" y="116" width="36" height="38" rx="3" fill="#b53a3a"/><rect x="114" y="124" width="24" height="6" fill="#ffd45a"/>'},
+{n:'Папа с малышом на плечах',sk:'#e6bf9f',cl:'#6a8a5a',hp:2e13,l:['Дайте что-нибудь от температуры, срочно!','Тише, Вася, тётя фармацевт сердится!','Сколько-сколько стоит?!'],
+x:'<path d="M46 54Q48 30 80 30Q112 30 114 54Q100 42 80 44Q60 42 46 54z" fill="#4a3a30"/>',
+y:'<path d="M62 84Q80 96 98 84" fill="#000" opacity=".12"/><circle cx="80" cy="16" r="13" fill="#f6d2b8"/><circle cx="75" cy="15" r="1.6" fill="#333"/><circle cx="85" cy="15" r="1.6" fill="#333"/><path d="M75 21Q80 25 85 21" stroke="#c0505a" stroke-width="2" fill="none"/>'},
+{n:'Директор сети с проверкой',sk:'#f1d2bb',cl:'#c8293a',hp:9e13,l:['Почему очередь до двери?!','Кто разрешил скидку? Премии лишу!','Всё должно быть идеально, без исключений!'],
+x:'<path d="M46 56Q48 28 80 28Q112 28 114 56Q100 40 80 46Q62 40 46 56z" fill="#2a1f1f"/><circle cx="80" cy="20" r="11" fill="#2a1f1f"/>',
+y:'<path d="M52 62l26 2v8l-26-4zM108 62l-26 2v8l26-4z" fill="none" stroke="#222" stroke-width="3"/><path d="M68 92Q80 84 92 92" stroke="#c8293a" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M118 110L140 70" stroke="#f1d2bb" stroke-width="9" stroke-linecap="round"/><rect x="40" y="126" width="26" height="12" rx="2" fill="#fff"/>'}];
+function bossAt(i){var b=BO[i%20],t=Math.floor(i/20);return{n:b.n+(t?' '+(t+1)+' ур.':''),sk:b.sk,cl:b.cl,x:b.x,y:b.y,l:b.l,hp:b.hp*1.6*Math.pow(1e12,t)}}
+function bsvg(b){return'<svg viewBox="0 0 160 160" aria-hidden="true"><path d="M20 160Q22 112 80 108Q138 112 140 160Z" fill="'+b.cl+'"/><rect x="68" y="90" width="24" height="24" rx="8" fill="'+b.sk+'"/><circle cx="80" cy="66" r="36" fill="'+b.sk+'"/>'+b.x+'<circle cx="66" cy="64" r="8" fill="#fff"/><circle cx="94" cy="64" r="8" fill="#fff"/><circle cx="67" cy="66" r="3.8" fill="#2b2230"/><circle cx="93" cy="66" r="3.8" fill="#2b2230"/><path d="M54 50L74 58M106 50L86 58" stroke="#2b2230" stroke-width="4" stroke-linecap="round"/><path d="M68 92Q80 84 92 92" stroke="#7a2f3d" stroke-width="3.5" fill="none" stroke-linecap="round"/>'+b.y+'</svg>'}
+var G=[
+['Погладь героиню 50 раз',function(s){return s.ck},50,{f:80}],
+['Обслужи первого клиента',function(s){return s.bi},1,{s:'atk'}],
+['Найми 5 помощников',function(s){return cnt(s)},5,{f:300}],
+['Нанеси 20 критов',function(s){return s.cr},20,{s:'agi'}],
+['Обслужи 3 клиентов',function(s){return s.bi},3,{s:'end'}],
+['Заработай 10 тыс. рыбок',function(s){return s.all},1e4,{s:'mag'}],
+['Прокачай Силу до 10 уровня',function(s){return s.st.atk},10,{f:3000}],
+['Обслужи 5 клиентов',function(s){return s.bi},5,{s:'luck'}],
+['Собери весь гардероб',function(s){return s.w.filter(Boolean).length},7,{f:5e6}],
+['Сделай 1000 кликов',function(s){return s.ck},1e3,{s:'atk'}],
+['Обслужи 8 клиентов',function(s){return s.bi},8,{s:'agi'}],
+['Пройди проверку ведомства',function(s){return s.bi},10,{f:5e8}],['Обслужи 15 клиентов',function(s){return s.bi},15,{s:'luck'}],['Обслужи всех 20 клиентов',function(s){return s.bi},20,{f:5e11}]];
+function cnt(s){return s.h.reduce(function(a,b){return a+b},0)}
+function fresh(){return{f:0,all:0,ck:0,cr:0,bi:0,h:H.map(function(){return 0}),st:{atk:0,agi:0,mag:0,end:0,luck:0},w:[],wo:[],gc:[],t:Date.now()}}
+var S=fresh(),D={fz:0,dm:1,ts:1,auto:0,cps:6,ai:0};
+try{var raw=localStorage.getItem('cathero-v2');if(raw){var o=JSON.parse(raw);for(var k in o)S[k]=o[k];H.forEach(function(_,i){S.h[i]=S.h[i]||0})}}catch(e){}
+function save(){S.t=Date.now();try{localStorage.setItem('cathero-v2',JSON.stringify(S))}catch(e){}}
+function hc(k){var s=0;H.forEach(function(h,i){if(h.k===k)s+=S.h[i]});return s}
+function wm(){return 1+.03*S.w.filter(Boolean).length}
+function dmg(){var L=S.st.atk,fl=0;H.forEach(function(h,i){if(h.t==='f')fl+=h.v*S.h[i]});return((1+L*1.5)*Math.pow(1.1,L)+fl)*wm()*(1+.04*hc('bard'))*D.dm}
+function cch(){return Math.min(.75,.05+S.st.agi*.012+hc('crit')*.01)}
+function cm(){return 2+S.st.mag*.12}
+function tlim(){return 10+Math.min(5,S.st.end*.3)+Math.min(5,hc('time')*.4)}
+function luck(){return(1+S.st.luck*.1)*wm()}
+function fps(){var s=0;H.forEach(function(h,i){if(h.t==='e')s+=h.v*S.h[i]});return s*luck()*.6}
+function scost(k){return 40*Math.pow(1.5,S.st[k])}
+function hcost(i,n){return H[i].b*Math.pow(1.17,S.h[i])*(Math.pow(1.17,n)-1)/.17}
+var mode='afk',boss=bossAt(S.bi),bhp=boss.hp,tEnd=0,dying=0,tab='s',q=1;
+var VIS=[['#f6e6c9','c','<circle cx="20" cy="34" r="3" fill="#f6a5bd"/>'],['#9aa4b8','c','<path d="M28 31l9-5-3 9z" fill="#7fc7e8"/><path d="M12 12q8-9 16 0z" fill="#c9a24a"/>'],['#b98a62','c','<rect x="26" y="31" width="8" height="7" rx="2" fill="#fff"/>'],['#fbf5ee','c','<circle cx="13" cy="9" r="3" fill="#ff9ec4"/><circle cx="17" cy="7" r="3" fill="#ffd36b"/>'],['#3d3a55','c','<rect x="26" y="32" width="10" height="6" rx="1" fill="#ffd36b"/>'],['#8fb8e8','c','<circle cx="20" cy="20" r="13" fill="#cfe9ff" opacity=".35" stroke="#fff"/>'],['#f0a35b','c','<path d="M31 41l6-14" stroke="#cfd6e0" stroke-width="3"/><path d="M28 34h7" stroke="#8a5a3a" stroke-width="2"/>'],['#bdb7c9','m','<path d="M32 24q8 8 0 16" stroke="#8a5a3a" stroke-width="2" fill="none"/>'],['#a47a56','o','<path d="M10 13h20l-10-9z" fill="#5b4a8a"/>'],['#d3a56e','d','<path d="M10 15q10-10 20 0z" fill="#aab4c4"/>'],['#8fd19e','h','<path d="M5 30q-4-8 2-12M35 30q4-8-2-12" stroke="#bfeacb" stroke-width="3" fill="none"/>'],['#f08a3c','f','<circle cx="30" cy="35" r="4.5" fill="#fff" stroke="#8a5a3a"/>'],['#9b7452','h2',''],['#c7b6f0','c','<ellipse cx="29" cy="36" rx="5" ry="4" fill="#b07a43"/><path d="M33 34l5-7" stroke="#8a5a3a" stroke-width="1.5"/>']];
+var EA={c:'<path d="M10 14L12 3 21 10zM30 14L28 3 19 10z" fill="#C"/>',m:'<circle cx="11" cy="10" r="6" fill="#C"/><circle cx="29" cy="10" r="6" fill="#C"/>',o:'<path d="M10 12L11 2 19 8zM30 12L29 2 21 8z" fill="#C"/>',d:'<ellipse cx="9" cy="17" rx="4" ry="8" fill="#9b6b3a"/><ellipse cx="31" cy="17" rx="4" ry="8" fill="#9b6b3a"/>',f:'<path d="M9 14L11 0 21 9zM31 14L29 0 19 9z" fill="#C"/>',h:'<path d="M12 9L10 2 17 7zM28 9L30 2 23 7z" fill="#e8d9a0"/>',h2:'<path d="M9 14l3-9 3 7 3-9 3 8 3-9 3 8 3-7 3 9z" fill="#6d4e36"/>'};
+function sprite(i){var v=VIS[i],c=v[0];return'<svg viewBox="0 0 40 44" aria-hidden="true">'+EA[v[1]].replace('#C',c)+'<ellipse cx="20" cy="34" rx="11" ry="9" fill="'+c+'"/><circle cx="20" cy="21" r="11" fill="'+c+'"/><circle cx="16" cy="20" r="1.7" fill="#2b2a3a"/><circle cx="24" cy="20" r="1.7" fill="#2b2a3a"/><path d="M18.5 24h3l-1.5 1.8z" fill="#e88aa3"/>'+v[2]+'</svg>'}
+var csig='';
+function crew(){var sg=S.h.join();if(sg===csig)return;csig=sg;var k=0,h='';
+H.forEach(function(x,i){if(!S.h[i])return;var j=k>>1,row=(j/3)|0,col=j%3,ax=k%2?75+col*8:2+col*8,fr=(k/6)|0,fx=3+(k%6)*7.2;
+h+='<div class="cmp" style="--ax:'+ax+'%;--fx:'+fx+'%;--ab:'+(4+row*26)+'px;--fb:'+(4+fr*26)+'px;animation-delay:'+(-k*.37)+'s" title="'+x.n+'">'+sprite(i)+'<i>'+S.h[i]+'</i></div>';k++});
+$('crew').innerHTML=h}
+function hop(){var c=document.querySelectorAll('.cmp');if(!c.length)return;for(var i=0;i<2;i++){var e=c[Math.floor(Math.random()*c.length)];e.classList.remove('hop');void e.offsetWidth;e.classList.add('hop');(function(e){setTimeout(function(){e.classList.remove('hop')},280)})(e)}}
+function face(c){var s=$('catsvg');s.classList.add('meow');if(c||Math.random()<.5)s.classList.add('happy');clearTimeout(face.h);face.h=setTimeout(function(){s.classList.remove('meow','happy')},c?380:240)}
+var AC=null,lastM=0;
+function ac(){if(S.mute)return null;if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){return null}}if(AC.state==='suspended')AC.resume();return AC}
+function meow(k){var a=ac(),n0=Date.now();if(!a||n0-lastM<110)return;lastM=n0;var t=a.currentTime,p=(430+Math.random()*150)*(k==='c'?1.22:k==='f'?1.05:1),d=k==='f'?.24:.4+Math.random()*.12,o=a.createOscillator(),b=a.createBiquadFilter(),l=a.createBiquadFilter(),g=a.createGain(),v=a.createOscillator(),vg=a.createGain();
+o.type='sawtooth';o.frequency.setValueAtTime(p*.8,t);o.frequency.linearRampToValueAtTime(p*1.4,t+d*.3);o.frequency.exponentialRampToValueAtTime(p*.75,t+d);
+v.frequency.value=22;vg.gain.value=p*.012;v.connect(vg);vg.connect(o.frequency);
+b.type='bandpass';b.Q.value=3.5;b.frequency.setValueAtTime(750,t);b.frequency.linearRampToValueAtTime(1900,t+d*.35);b.frequency.linearRampToValueAtTime(900,t+d);
+l.type='lowpass';l.frequency.value=3800;
+g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(k==='f'?.16:.24,t+.05);g.gain.exponentialRampToValueAtTime(.0001,t+d);
+o.connect(b);b.connect(l);l.connect(g);g.connect(a.destination);o.start(t);v.start(t);o.stop(t+d+.05);v.stop(t+d+.05)}
+function note(f,t0,d,vol){var a=ac();if(!a)return;var t=a.currentTime+t0,o=a.createOscillator(),g=a.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+d+.05)}
+var SF={k:[[784,0],[988,.09],[1319,.18]],h:[[659,0],[880,.08]],w:[[1047,0],[1319,.07],[1568,.14],[2093,.21]],g:[[784,0],[988,.1],[1175,.2],[1568,.3]],win:[[523,0],[659,.12],[784,.24],[1047,.36],[1319,.5]],lose:[[440,0],[349,.16]]};
+function sfx(k){(SF[k]||[]).forEach(function(n){note(n[0],n[1],k==='win'?.5:.32,k==='lose'?.1:.12)})}
+function sndLab(){var b=$('snd');b.innerHTML='Звук<small>'+(S.mute?'выкл':'вкл')+'</small>';b.setAttribute('aria-pressed',!S.mute)}
+$('snd').onclick=function(){S.mute=!S.mute;sndLab();if(!S.mute)note(880,0,.25,.1);save()};
+function petals(){for(var i=0;i<12;i++){var p=document.createElement('i'),s=8+Math.random()*7;p.className='pt';p.style.cssText='left:'+Math.random()*100+'%;animation-duration:'+(14+Math.random()*14)+'s;animation-delay:'+(-Math.random()*20)+'s;width:'+s+'px;height:'+s+'px';document.body.appendChild(p)}}
+function pharm(){var c=['#e86a8a','#6bb7e8','#f4c35a','#7fd1a0','#b59bf0','#ff9f6b','#9ad0d8','#fff'],s=11,r=function(){s=(s*9301+49297)%233280;return s/233280},h='<svg viewBox="0 0 480 330" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="pw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eef8f5"/><stop offset="1" stop-color="#d3e8e2"/></linearGradient><pattern id="tl" width="40" height="20" patternUnits="userSpaceOnUse"><rect width="40" height="20" fill="#e2ebe8"/><rect width="20" height="10" fill="#d2dcd9"/><rect x="20" y="10" width="20" height="10" fill="#d2dcd9"/></pattern></defs><rect width="480" height="330" fill="url(#pw)"/><rect x="18" y="26" width="444" height="150" rx="8" fill="#f9fdfc" stroke="#cfe0db" stroke-width="3"/>';
+for(var row=0;row<3;row++){var y=76+row*50,x=28;while(x<436){var w=9+(r()*10|0),b=r()<.4,ht=b?24:16+(r()*12|0),col=c[r()*8|0];
+if(b)h+='<rect x="'+x+'" y="'+(y-ht)+'" width="'+(w*.8)+'" height="'+ht+'" rx="3" fill="'+col+'"/><rect x="'+(x+w*.15)+'" y="'+(y-ht-4)+'" width="'+(w*.5)+'" height="5" rx="1" fill="#fff" stroke="#cfd8d6" stroke-width=".8"/>';
+else h+='<rect x="'+x+'" y="'+(y-ht)+'" width="'+w+'" height="'+ht+'" rx="2" fill="'+col+'"/><rect x="'+x+'" y="'+(y-ht*.6)+'" width="'+w+'" height="4" fill="#fff" opacity=".75"/>';
+x+=w+3+(r()*5|0)}
+h+='<rect x="18" y="'+y+'" width="444" height="5" fill="#cdb48a"/>'}
+h+='<rect x="0" y="196" width="480" height="64" fill="#efe9dd"/><rect x="0" y="190" width="480" height="9" fill="#d3bb8f"/><rect x="0" y="260" width="480" height="70" fill="url(#tl)"/>';
+h+='<rect x="200" y="150" width="74" height="42" rx="6" fill="#dfe3e8" stroke="#aeb7c2" stroke-width="2"/><rect x="208" y="130" width="34" height="22" rx="4" fill="#2f4858"/><rect x="212" y="134" width="26" height="12" rx="2" fill="#7fe0c9"/><rect x="214" y="164" width="52" height="20" rx="3" fill="#c3cbd5"/><path d="M220 168h10M236 168h10M252 168h10M220 176h10M236 176h10M252 176h10" stroke="#8d98a6" stroke-width="4" stroke-linecap="round"/>';
+h+='<circle cx="240" cy="14" r="12" fill="#fff" stroke="#37b36b" stroke-width="2"/><path d="M236 6h8v4h4v8h-4v4h-8v-4h-4v-8h4z" fill="#37b36b"/></svg>';return h}
+function openName(){$('nmi').value=S.nm||'';$('ov').hidden=false;setTimeout(function(){$('nmi').focus()},60)}
+function setName(){S.nm=($('nmi').value.replace(/[<>&"'`]/g,'').trim()||S.nm||'Муся').slice(0,14);$('ov').hidden=true;save();head()}
+$('nmb').onclick=setName;$('nmi').addEventListener('keydown',function(e){if(e.key==='Enter')setName()});
+var DM=[1,10,100,1e3,1e6],TS=[1,10,100,1e3],CP=[3,6,10,15],dbv=1,rc=0,ct=0,cl=0;
+function devSt(){$('dvs').textContent='урон/клик '+F(dmg())+', крит '+Math.round(cch()*100)+'% ×'+cm().toFixed(1)+', время боя '+tlim().toFixed(1)+' с, доход '+F(fps())+'/с, клиент '+(S.bi+1)+', упрямство '+F(Math.max(0,bhp))}
+function devUI(){var b=function(a,l,on){return'<button data-a="'+a+'"'+(on?' class="on"':'')+'>'+l+'</button>'},ad=dmg()/D.dm*(1+cch()*(cm()-1)),tl=tlim(),rows='',stuck=0,v=$('dbn');if(v)dbv=v.value||dbv;
+for(var i=0;i<20;i++){var bb=bossAt(i),c=bb.hp/ad/tl,k=c<=6?'tk':c<=10?'tm':'tb';if(!stuck&&c>10)stuck=i+1;rows+='<tr'+(i===S.bi%20?' style="font-weight:800"':'')+'><td>'+(i+1)+'</td><td>'+bb.n+'</td><td>'+F(bb.hp)+'</td><td class="'+k+'">'+F(c)+'</td></tr>'}
+$('dev').innerHTML='<h3>Режим разработчика</h3><p id="dvs" class="note" style="padding:0 0 8px"></p>'
++'<div class="dg"><b>Рыбки</b>'+b('f+1e3','+1 тыс.')+b('f+1e6','+1 млн')+b('f+1e9','+1 млрд')+b('f+1e12','+1 трлн')+b('f*10','×10')+b('f=0','обнулить')+'</div>'
++'<div class="dg"><b>Клиент</b>'+b('b-1','−1')+b('b+1','+1')+'<input id="dbn" type="number" min="1" value="'+dbv+'" aria-label="Номер клиента">'+b('bgo','Перейти')+b('kill','Победить сейчас')+'</div>'
++'<div class="dg"><b>Герой</b>'+b('s+10','все +10')+b('s+50','все +50')+b('s=0','сброс')+'</div>'
++'<div class="dg"><b>Отряд</b>'+b('h+10','все +10')+b('h+100','все +100')+b('h=0','сброс')+'</div>'
++'<div class="dg"><b>Прочее</b>'+b('wd','весь гардероб')+b('gc','забрать готовые цели')+b('gs','накрутить счётчики целей')+'</div>'
++'<div class="dg"><b>Тест</b>'+b('fz','Таймер боя: '+(D.fz?'заморожен':'идёт'),D.fz)+b('dm','Урон ×'+F(D.dm),D.dm>1)+b('ts','Время ×'+D.ts,D.ts>1)+b('auto','Автоклик: '+(D.auto?'вкл':'выкл'),D.auto)+b('cps','Клик/с: '+D.cps)+'</div>'
++'<p class="note" style="padding:0 0 6px"><b>Баланс при текущей прокачке</b> (нужно кликов в секунду: до 6 зелёный, до 10 жёлтый, выше красный). '+(stuck?'Упрёшься в клиента №'+stuck+'.':'Все 20 клиентов проходимы.')+'</p>'
++'<div class="dvt"><table><tr><th>№</th><th>Клиент</th><th>Упрямство</th><th>Клик/с</th></tr>'+rows+'</table></div>'
++'<div class="dg"><b>Данные</b>'+b('exp','экспорт')+b('imp','импорт')+b('rst','Полный сброс')+b('x','закрыть')+'</div><textarea id="dvj" aria-label="JSON сохранения" spellcheck="false"></textarea>';devSt()}
+function devSpawn(){spawn();if(mode==='fight')tEnd=Date.now()+tlim()*1000}
+$('dev').addEventListener('click',function(e){var el=e.target.closest('button'),a=el&&el.dataset.a;if(!a)return;
+if(a.slice(0,2)==='f+')gain(+a.slice(2));
+else if(a==='f*10')gain(S.f*9);
+else if(a==='f=0')S.f=0;
+else if(a==='b-1'||a==='b+1'){S.bi=Math.max(0,S.bi+(a==='b+1'?1:-1));devSpawn()}
+else if(a==='bgo'){S.bi=Math.max(0,(+$('dbn').value||1)-1);devSpawn()}
+else if(a==='kill'){if(mode==='fight'&&!dying){bhp=0;win()}else toast('Сначала начни бой')}
+else if(a==='s+10'||a==='s+50'){var n=+a.slice(2);Object.keys(S.st).forEach(function(k){S.st[k]+=n})}
+else if(a==='s=0')Object.keys(S.st).forEach(function(k){S.st[k]=0});
+else if(a==='h+10'||a==='h+100'){var m=+a.slice(2);S.h=S.h.map(function(v){return v+m})}
+else if(a==='h=0')S.h=H.map(function(){return 0});
+else if(a==='wd'){WD.forEach(function(_,i){S.w[i]=1;S.wo[i]=1});drawW()}
+else if(a==='gc'){G.forEach(function(g,i){if(!S.gc[i]&&g[1](S)>=g[2])claim(i)})}
+else if(a==='gs'){S.ck=Math.max(S.ck,1e4);S.cr=Math.max(S.cr,1e3);S.all=Math.max(S.all,1e12)}
+else if(a==='fz')D.fz^=1;
+else if(a==='dm')D.dm=DM[(DM.indexOf(D.dm)+1)%DM.length];
+else if(a==='ts')D.ts=TS[(TS.indexOf(D.ts)+1)%TS.length];
+else if(a==='auto'){D.auto^=1;clearInterval(D.ai);if(D.auto)D.ai=setInterval(tap,1000/D.cps)}
+else if(a==='cps'){D.cps=CP[(CP.indexOf(D.cps)+1)%CP.length];if(D.auto){clearInterval(D.ai);D.ai=setInterval(tap,1000/D.cps)}}
+else if(a==='exp'){$('dvj').value=JSON.stringify(S);return}
+else if(a==='imp'){try{S=Object.assign(fresh(),JSON.parse($('dvj').value));csig='';drawW();spawn();toast('Сохранение загружено')}catch(x){toast('Не удалось прочитать JSON');return}}
+else if(a==='rst'){if(!rc){rc=1;el.textContent='Точно сбросить?';setTimeout(function(){rc=0;if(el.isConnected)el.textContent='Полный сброс'},3000);return}rc=0;S=fresh();S.nm='';try{localStorage.removeItem('cathero-v2')}catch(x){}csig='';setMode('afk');drawW();spawn();openName()}
+else if(a==='x'){$('dev').hidden=true;return}
+save();render();head();goalBar();devUI()});
+$('fish').parentNode.addEventListener('click',function(){var n=Date.now();ct=n-cl<1500?ct+1:1;cl=n;if(ct>=5){ct=0;$('dev').hidden=!$('dev').hidden;if(!$('dev').hidden){devUI();$('dev').scrollIntoView({behavior:'smooth'})}}});
+if(location.hash==='#dev'){$('dev').hidden=false;devUI()}
+var cmb=0,cmT=0,spT=Date.now()+20000,SK=[['Мурр-вспышка',12000,1],['Кофе-пауза',30000,3]],skT=[0,0],wkT=0,wk=null;
+var PILL='<svg viewBox="0 0 48 48" aria-hidden="true"><g transform="rotate(-35 24 24)"><rect x="6" y="14" width="36" height="20" rx="10" fill="#fff" stroke="#d6dde8" stroke-width="2"/><path d="M24 14h8a10 10 0 0 1 0 20h-8z" fill="#ff6f9c"/></g><path d="M38 6l2 4 4 2-4 2-2 4-2-4-4-2 4-2z" fill="#ffd45a"/></svg>',BFLY='<svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="7" cy="8" rx="6" ry="7" fill="#ff9ec4"/><ellipse cx="17" cy="8" rx="6" ry="7" fill="#8ec5ff"/><ellipse cx="8" cy="17" rx="4" ry="4.5" fill="#ffd36b"/><ellipse cx="16" cy="17" rx="4" ry="4.5" fill="#b7f0c0"/><rect x="11" y="5" width="2" height="15" rx="1" fill="#4a3d5e"/></svg>';
+function spark(){var f=mode==='fight',b=document.createElement('button');b.className='spk';b.setAttribute('aria-label',f?'Бонусная таблетка':'Бабочка');b.innerHTML=f?PILL:BFLY;b.style.left=(8+Math.random()*72)+'%';b.style.top=(34+Math.random()*30)+'%';
+b.onpointerdown=function(ev){ev.stopPropagation();ev.preventDefault();b.remove();
+if(f){if(mode==='fight'&&!dying){var d=dmg()*15;bhp-=d;fl('БОНУС '+F(d),'c','boss');anim('boss','hit');sfx('h');if(bhp<=0)win()}}
+else{var g=Math.max(fps()*45,dmg()*12*luck());gain(g);fl('+'+F(g),'c','hero');sfx('w')}};
+$('arena').appendChild(b);setTimeout(function(){b.remove()},f?1800:7000)}
+function skill(i){var n=Date.now();if(mode!=='fight'||dying||S.bi<SK[i][2]||n<skT[i])return;skT[i]=n+SK[i][1];
+if(i===0){var d=dmg()*25;bhp-=d;fl('ВСПЫШКА '+F(d),'c','boss');anim('boss','hit');sfx('k');if(bhp<=0)win()}
+else{tEnd+=4000;toast('+4 секунды на бой');sfx('h')}}
+$('sk0').onclick=function(){skill(0)};$('sk1').onclick=function(){skill(1)};
+function skUI(){var f=mode==='fight',n=Date.now();$('skills').hidden=!f;if(!f)return;
+[0,1].forEach(function(i){var b=$('sk'+i),lock=S.bi<SK[i][2],r=skT[i]-n;b.disabled=lock||r>0||dying;b.innerHTML=SK[i][0]+'<small>'+(lock?'после '+SK[i][2]+' кл.':r>0?Math.ceil(r/1000)+' с':'готово')+'</small><i style="width:'+(r>0?r/SK[i][1]*100:0)+'%"></i>'})}
+function wkTick(n){if(mode!=='fight'||dying){if(wk){wk.remove();wk=null}return}
+if(n<wkT)return;wkT=n+1700;
+if(!wk){wk=document.createElement('button');wk.className='wk';wk.setAttribute('aria-label','Слабое место');
+wk.onpointerdown=function(ev){ev.stopPropagation();ev.preventDefault();if(mode!=='fight'||dying)return;var d=dmg()*4;S.ck++;bhp-=d;fl('ТОЧНО '+F(d),'c','boss');anim('boss','hit');sfx('h');wkT=0;if(bhp<=0)win()};$('arena').appendChild(wk)}
+var u=$('boss');wk.style.left=(u.offsetLeft+u.offsetWidth*(.22+Math.random()*.5)-22)+'px';wk.style.top=(u.offsetTop+u.offsetHeight*(.15+Math.random()*.4)-22)+'px'}
+function toast(t){var e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(function(){e.classList.remove('on')},3200)}
+function gain(x){S.f+=x;S.all+=x}
+function drawW(){WD.forEach(function(w,i){$('l-'+w.k).style.display=S.wo[i]?'':'none'})}
+function anim(id,c){var e=$(id);e.classList.remove(c);void e.offsetWidth;e.classList.add(c)}
+function fl(txt,cls,id){var a=$('arena'),u=$(id),e=document.createElement('span');e.className='fl '+cls;e.textContent=txt;e.style.left=(u.offsetLeft+u.offsetWidth*(.25+Math.random()*.4))+'px';e.style.top=(u.offsetTop+20+Math.random()*40)+'px';a.appendChild(e);setTimeout(function(){e.remove()},800)}
+function say(txt,ms){var e=$('say');e.textContent=txt;e.classList.add('on');clearTimeout(say.h);say.h=setTimeout(function(){e.classList.remove('on')},ms||2600)}
+function spawn(){boss=bossAt(S.bi);bhp=boss.hp;$('boss').innerHTML=bsvg(boss);$('boss').classList.remove('dead');dying=0;if(mode==='fight')say(boss.l[Math.floor(Math.random()*boss.l.length)])}
+function setMode(m){mode=m;$('arena').className='arena '+m;if(m==='fight'){spawn();tEnd=Date.now()+tlim()*1000;nextSay=Date.now()+4500}else $('say').classList.remove('on');label()}
+function label(){var b=$('fightbtn');if(mode==='fight'){b.className='fight-btn off';b.innerHTML='Уйти на перерыв<small>вернуться на поляну и копить рыбки</small>'}else{var n=bossAt(S.bi);b.className='fight-btn';b.innerHTML='Принять клиента: «'+n.n+'»<small>упрямство '+F(n.hp)+', время '+tlim().toFixed(1)+' с, убеждай кликами</small>'}}
+function win(){dying=1;sfx('win');var r=boss.hp*.35*luck();gain(r);S.bi++;$('boss').classList.add('dead');toast('Обслужила: «'+boss.n+'». +'+F(r)+' рыбок');say(DEF[Math.floor(Math.random()*DEF.length)],1500);setTimeout(function(){if(mode!=='fight')return;spawn();tEnd=Date.now()+tlim()*1000;render()},800)}
+function lose(){sfx('lose');toast('Клиент ушёл с жалобой... Прокачайся и попробуй снова');setMode('afk')}
+function tap(){S.ck++;var n0=Date.now();cmb=n0-cmT<800?cmb+1:1;cmT=n0;var cx=mode==='fight'?1+Math.min(1,cmb/50):1,c=Math.random()<cch(),d=dmg()*(c?cm():1)*cx;if(c)S.cr++;if(!D.auto)meow(c?'c':mode==='fight'?'f':'n');face(c);hop();
+if(mode==='afk'){var f=Math.max(.5,d*.12)*luck();gain(f);fl('+'+F(f),c?'c':'g','hero');anim('hero','bump')}
+else if(!dying){bhp-=d;fl((c?'КРИТ ':'')+F(d),c?'c':'','boss');anim('boss','hit');if(bhp<=0)win()}}
+$('arena').addEventListener('pointerdown',function(e){e.preventDefault();tap()});
+$('fightbtn').onclick=function(){setMode(mode==='fight'?'afk':'fight')};
+function row(id,n,d,c,l,alt){return'<div class="it"><div><b>'+n+'</b><small>'+d+'</small></div><button class="buy'+(alt?' alt':'')+'" data-id="'+id+'" data-c="'+c+'">'+l+'</button></div>'}
+function render(){
+var h='';
+document.querySelectorAll('.tab').forEach(function(b){b.setAttribute('aria-selected',b.dataset.t===tab)});
+$('qty').style.display=tab==='f'||tab==='o'?'':'none';
+document.querySelectorAll('#qty button').forEach(function(b){b.setAttribute('aria-pressed',+b.dataset.q===q)});
+if(tab==='s'){var V={atk:function(){return'урон за клик '+F(dmg())},agi:function(){return'крит '+Math.round(cch()*100)+'%'},mag:function(){return'крит ×'+cm().toFixed(1)},end:function(){return'время боя '+tlim().toFixed(1)+' с'},luck:function(){return'×'+(luck()/wm()).toFixed(1)+' рыбок'}};
+ST.forEach(function(s){var c=scost(s[0]);h+=row('k'+s[0],s[1]+' <span class="lv">ур. '+S.st[s[0]]+'</span>',s[2]+': '+V[s[0]](),c,'Прокачать<br>'+F(c))});
+h+='<p class="note">Сила, Ловкость и Меткость делают клики мощнее, Выдержка даёт больше времени на бой, Удача увеличивает рыбки.</p>';h+=row('n','Имя героини',S.nm||'без имени',0,'Изменить',1)}
+else if(tab==='f'||tab==='o'){H.forEach(function(x,i){if(tab==='f'?x.t!=='e':x.t==='e')return;var c=hcost(i,q),e=x.t==='e'?x.d+'. +'+F(x.v*luck()*.6)+' рыбок/с каждый':x.t==='f'?x.d+'. +'+F(x.v*wm())+' к клику каждый':x.d;h+=row('h'+i,x.n+' <span class="lv">'+S.h[i]+'</span>',e,c,'Нанять ×'+q+'<br>'+F(c))})}
+else if(tab==='w'){h='<p class="note">Каждый наряд даёт +3% к урону и рыбкам.</p>';WD.map(function(_,i){return i}).sort(function(a,b){return WD[a].c-WD[b].c}).forEach(function(i){var x=WD[i];h+=S.w[i]?row('w'+i,x.n,S.wo[i]?'Надето':'В шкафу',0,S.wo[i]?'Снять':'Надеть',1):row('w'+i,x.n,'+3% к урону и рыбкам',x.c,F(x.c))})}
+else{G.forEach(function(g,i){var p=Math.min(g[1](S),g[2]),cl=S.gc[i];h+='<div class="it"><div><b>'+(cl?'✓ ':'')+g[0]+'</b><small>Награда: '+(g[3].f?F(g[3].f)+' рыбок':'+1 уровень: '+ST.filter(function(s){return s[0]===g[3].s})[0][1])+'</small><div class="pb"><i data-g="'+i+'"></i></div></div>'+(cl?'':'<button class="buy" data-id="g'+i+'" data-c="0" disabled>Забрать</button>')+'</div>'})}
+$('list').innerHTML=h;label();upd();crew()}
+function claim(i){var g=G[i];if(S.gc[i]||g[1](S)<g[2])return;S.gc[i]=1;if(g[3].f)gain(g[3].f);else S.st[g[3].s]++;toast('Награда получена!');sfx('g');render()}
+function upd(){document.querySelectorAll('.buy[data-c]').forEach(function(b){var id=b.dataset.id;if(id[0]==='g'){var g=G[+id.slice(1)];b.disabled=g[1](S)<g[2]}else b.disabled=+b.dataset.c>S.f&&+b.dataset.c>0});
+document.querySelectorAll('[data-g]').forEach(function(e){var g=G[+e.dataset.g];e.style.width=Math.min(100,g[1](S)/g[2]*100)+'%'})}
+function goalBar(){var n=-1,i;for(i=0;i<G.length;i++){if(!S.gc[i]&&G[i][1](S)>=G[i][2]){n=i;break}}
+if(n<0)for(i=0;i<G.length;i++){if(!S.gc[i]){n=i;break}}
+var el=$('goal');if(n<0){el.innerHTML='<b>Все цели выполнены!</b><small>Дальше только новые боссы</small>';return}
+var g=G[n],p=Math.min(g[1](S),g[2]),ok=p>=g[2],s=n+':'+ok;
+if(el.dataset.s!==s){el.dataset.s=s;el.innerHTML='<b>Цель: '+g[0]+'</b>'+(ok?'<button class="buy" id="gc" style="min-height:38px">Забрать</button>':'<small id="gp"></small>')+'<div class="pb"><i id="gb"></i></div>';if(ok)$('gc').onclick=function(){claim(n)}}
+$('gb').style.width=p/g[2]*100+'%';if($('gp'))$('gp').textContent=F(p)+' / '+F(g[2])}
+function head(){var n=Date.now();$('fish').textContent=F(S.f);$('ps').textContent='+'+F(fps())+'/с';
+$('hn').textContent=(S.nm||'Героиня')+', ур. '+(1+Object.keys(S.st).reduce(function(a,k){return a+S.st[k]},0));$('hd').textContent='урон за клик '+F(dmg());var cb=$('cmb'),on=mode==='fight'&&Date.now()-cmT<900&&cmb>=5;cb.style.opacity=on?1:0;if(on)cb.textContent='Комбо ×'+(1+Math.min(1,cmb/50)).toFixed(1)+' ('+cmb+')';
+if(mode==='fight'){var l=Math.max(0,(tEnd-n)/1000);$('bn').textContent=boss.n;$('bhp').style.width=Math.max(0,bhp/boss.hp*100)+'%';$('bht').textContent=F(Math.max(0,bhp))+' / '+F(boss.hp);$('tm').style.width=Math.min(100,l/tlim()*100)+'%';$('msg').textContent='Осталось '+l.toFixed(1)+' с, жми быстрее!'}
+else{$('msg').textContent='Гладь кошку, чтобы получать рыбки'}
+var p=S.bi%20,ph='Клиент '+(p+1)+' из 20';if($('path').dataset.p!==ph){$('path').dataset.p=ph;$('path').textContent=ph}}
+$('tabs').innerHTML=[['s','Герой'],['f','Ферма'],['o','Отряд'],['g','Цели'],['w','Гардероб']].map(function(t){return'<button class="tab" role="tab" data-t="'+t[0]+'">'+t[1]+'</button>'}).join('');
+$('qty').innerHTML=[1,10,100].map(function(n){return'<button data-q="'+n+'">×'+n+'</button>'}).join('');
+$('tabs').addEventListener('click',function(e){var t=e.target.closest('.tab');if(t){tab=t.dataset.t;render()}});
+$('qty').addEventListener('click',function(e){var t=e.target.closest('button');if(t){q=+t.dataset.q;render()}});
+$('list').addEventListener('click',function(e){var b=e.target.closest('.buy');if(!b||b.disabled)return;var id=b.dataset.id,c=+b.dataset.c,t=id[0],r=id.slice(1);
+if(t==='n'){openName();return}
+if(t==='g'){claim(+r);return}
+if(t==='h'){S.f-=c;S.h[+r]+=q;sfx('h')}
+else if(t==='k'){S.f-=c;S.st[r]++;sfx('k')}
+else if(t==='w'){var i=+r;if(S.w[i])S.wo[i]=S.wo[i]?0:1;else{S.f-=c;S.w[i]=1;S.wo[i]=1}drawW();sfx('w')}
+render()});
+var last=Date.now(),sec=0;
+setInterval(function(){var n=Date.now(),dt=Math.min((n-last)/1000,3600);last=n;gain(fps()*dt*D.ts);
+if(D.fz&&mode==='fight')tEnd=n+tlim()*1000;if(mode==='fight'&&!dying&&n>=tEnd)lose();
+if(mode==='fight'&&!dying&&n>=nextSay){say(boss.l[Math.floor(Math.random()*boss.l.length)]);nextSay=n+4200+Math.random()*2500}
+if(n>=spT){if(!document.hidden&&$('ov').hidden&&!dying)spark();spT=n+(mode==='fight'?3500+Math.random()*3000:25000+Math.random()*25000)}
+head();upd();goalBar();skUI();wkTick(n);if(!$('dev').hidden)devSt();if(++sec>=100){sec=0;save()}},100);
+document.addEventListener('visibilitychange',function(){if(document.hidden)save()});
+var off=Math.min((Date.now()-S.t)/1000,28800);if(off>60&&fps()>0){var og=fps()*off*.5;gain(og);toast('Пока тебя не было, ферма принесла +'+F(og)+' рыбок')}
+$('boss').innerHTML=bsvg(boss);$('fbg').innerHTML=pharm();drawW();sndLab();petals();render();head();goalBar();if(!S.nm)openName();
+})();
+</script>
+</body>
+</html>
